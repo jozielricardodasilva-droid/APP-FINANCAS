@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 export interface AuthState {
   error?: string;
   success?: string;
+  email?: string;
 }
 
 export async function login(
@@ -62,8 +63,8 @@ export async function signup(
   // ainda não há sessão ativa — orienta o usuário a confirmar o e-mail.
   if (!data.session) {
     return {
-      success:
-        "Conta criada! Verifique seu e-mail para confirmar o cadastro antes de entrar.",
+      success: `Obrigado por se cadastrar, ${name.split(" ")[0]}! Enviamos um link de confirmação para o seu e-mail — confira sua caixa de entrada (e também a caixa de spam/lixo eletrônico, caso não encontre) para ativar sua conta.`,
+      email,
     };
   }
 

@@ -15,12 +15,38 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Loader2 } from "lucide-react";
+import { Loader2, MailCheck } from "lucide-react";
 
 const initialState: AuthState = {};
 
 export default function SignupPage() {
   const [state, formAction, pending] = useActionState(signup, initialState);
+
+  if (state?.success) {
+    return (
+      <Card>
+        <CardHeader className="items-center text-center">
+          <span className="mb-2 flex size-12 items-center justify-center rounded-full bg-primary/10 text-primary">
+            <MailCheck className="size-6" />
+          </span>
+          <CardTitle>Confira seu e-mail</CardTitle>
+          <CardDescription>{state.success}</CardDescription>
+        </CardHeader>
+        <CardFooter className="flex flex-col gap-4">
+          {state.email && (
+            <p className="text-center text-sm font-medium">{state.email}</p>
+          )}
+          <p className="text-center text-xs text-muted-foreground">
+            Não recebeu nada em alguns minutos? Verifique a pasta de spam/lixo
+            eletrônico antes de tentar novamente.
+          </p>
+          <Button render={<Link href="/login" />} className="w-full">
+            Ir para o login
+          </Button>
+        </CardFooter>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -35,11 +61,6 @@ export default function SignupPage() {
           {state?.error && (
             <Alert variant="destructive">
               <AlertDescription>{state.error}</AlertDescription>
-            </Alert>
-          )}
-          {state?.success && (
-            <Alert>
-              <AlertDescription>{state.success}</AlertDescription>
             </Alert>
           )}
           <div className="space-y-2">
