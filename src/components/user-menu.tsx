@@ -5,6 +5,7 @@ import { logout } from "@/app/(auth)/actions";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
@@ -29,7 +30,9 @@ export function UserMenu({ email }: { email: string }) {
         </span>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
-        <DropdownMenuLabel className="truncate">{email}</DropdownMenuLabel>
+        <DropdownMenuGroup>
+          <DropdownMenuLabel className="truncate">{email}</DropdownMenuLabel>
+        </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem
           disabled={pending}
