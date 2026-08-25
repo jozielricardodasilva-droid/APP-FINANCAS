@@ -67,3 +67,12 @@ drop policy if exists "Usuários podem excluir suas transações" on public.tran
 create policy "Usuários podem excluir suas transações"
   on public.transactions for delete
   using (auth.uid() = user_id);
+
+-- ----------------------------------------------------------------------------
+-- Privilégios de tabela: sem estes GRANTs, o PostgREST recusa qualquer
+-- acesso (erro 42501) mesmo com RLS configurado corretamente. RLS decide
+-- QUAIS linhas o usuário autenticado vê; os GRANTs decidem SE ele pode
+-- tentar. Apenas "authenticated" tem acesso — o app exige login para tudo.
+-- ----------------------------------------------------------------------------
+grant usage on schema public to authenticated;
+grant select, insert, update, delete on public.transactions to authenticated;
