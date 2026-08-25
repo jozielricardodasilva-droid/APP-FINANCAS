@@ -1,5 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
-import type { Transaction, TransactionFilters } from "@/lib/types";
+import type { Transaction, TransactionFilters, TransactionType } from "@/lib/types";
 
 export interface MonthSummary {
   income: number;
@@ -69,14 +69,15 @@ export async function getSummary(
   return summary;
 }
 
-export async function getExpensesByCategory(
+export async function getTotalsByCategory(
+  type: TransactionType,
   filters: TransactionFilters = {}
 ): Promise<CategoryTotal[]> {
   const supabase = await createClient();
   let query = supabase
     .from("transactions")
     .select("category, amount")
-    .eq("type", "expense");
+    .eq("type", type);
   query = applyFilters(query, { ...filters, type: "all" });
 
   const { data, error } = await query;

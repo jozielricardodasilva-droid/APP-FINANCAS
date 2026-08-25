@@ -6,18 +6,26 @@ import { colorForCategory } from "@/lib/categories";
 import { formatCurrency } from "@/lib/format";
 import type { CategoryTotal } from "@/lib/queries";
 
-export function CategoryChart({ data }: { data: CategoryTotal[] }) {
+export function CategoryChart({
+  title,
+  emptyMessage,
+  data,
+}: {
+  title: string;
+  emptyMessage: string;
+  data: CategoryTotal[];
+}) {
   const total = data.reduce((sum, d) => sum + d.total, 0);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Despesas por categoria</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent>
         {data.length === 0 ? (
           <p className="py-10 text-center text-sm text-muted-foreground">
-            Nenhuma despesa no período selecionado.
+            {emptyMessage}
           </p>
         ) : (
           <div className="flex flex-col gap-6 sm:flex-row sm:items-center">
