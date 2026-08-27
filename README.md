@@ -51,11 +51,45 @@ para `/login` (ou `/dashboard` se já houver sessão). Crie uma conta em
 
 ## 5. Deploy na Vercel
 
-1. Suba o projeto para um repositório no GitHub.
-2. Em [vercel.com/new](https://vercel.com/new), importe o repositório.
-3. Em **Environment Variables**, adicione `NEXT_PUBLIC_SUPABASE_URL` e
-   `NEXT_PUBLIC_SUPABASE_ANON_KEY` com os mesmos valores do `.env.local`.
-4. Deploy. A cada push na branch principal a Vercel republica automaticamente.
+O código já está em
+[github.com/jozielricardodasilva-droid/APP-FINANCAS](https://github.com/jozielricardodasilva-droid/APP-FINANCAS).
+
+1. Em [vercel.com/new](https://vercel.com/new), clique em **Import Git
+   Repository** e selecione `jozielricardodasilva-droid/APP-FINANCAS`
+   (autorize o acesso da Vercel à sua conta do GitHub se for pedido).
+2. A Vercel detecta o Next.js automaticamente — não precisa mudar build
+   command nem output directory.
+3. Antes de clicar em Deploy, abra **Environment Variables** e adicione:
+   - `NEXT_PUBLIC_SUPABASE_URL` → a Project URL do seu Supabase
+   - `NEXT_PUBLIC_SUPABASE_ANON_KEY` → a chave publishable/anon do seu Supabase
+
+   (os mesmos valores do seu `.env.local` — veja a seção **Segurança das
+   chaves** abaixo sobre por que essas duas são seguras para expor.)
+4. Clique em **Deploy**. A cada push na branch `main` a Vercel republica
+   automaticamente.
+5. Depois do primeiro deploy, se você habilitar confirmação de e-mail no
+   Supabase, ajuste em **Authentication → URL Configuration** a *Site URL*
+   e as *Redirect URLs* para o domínio que a Vercel gerou (ex:
+   `https://app-financas.vercel.app`) — senão o link de confirmação do
+   e-mail volta para `localhost`.
+
+## Segurança das chaves
+
+- `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_ANON_KEY` **são
+  destinadas a ir para o navegador** — qualquer variável com prefixo
+  `NEXT_PUBLIC_` é embutida no JavaScript público pelo Next.js. Isso é
+  intencional e seguro no modelo do Supabase: essa chave só identifica o
+  projeto, ela **não dá acesso a nada por si só** — quem decide o que cada
+  requisição pode ler/escrever é o Row Level Security do banco
+  ([`supabase/schema.sql`](supabase/schema.sql)), não o segredo da chave.
+- O app **nunca** usa a `service_role key` (a chave "mestra" que ignora RLS).
+  Ela não existe em nenhum lugar do código, do `.env.local.example` nem deve
+  ser configurada na Vercel — se algum dia for necessária para alguma
+  automação de backend, ela vai numa rota server-only, nunca numa variável
+  `NEXT_PUBLIC_*`.
+- `.env.local` (com as chaves reais) nunca é commitado — está no
+  `.gitignore`; só o `.env.local.example`, com placeholders, vai para o
+  repositório.
 
 ## Estrutura do projeto
 
