@@ -67,6 +67,13 @@ O código já está em
    chaves** abaixo sobre por que essas duas são seguras para expor.)
 4. Clique em **Deploy**. A cada push na branch `main` a Vercel republica
    automaticamente.
+
+   ⚠️ **Se você adicionar/editar as env vars depois que o deploy já rodou**,
+   ele não pega os novos valores sozinho — variáveis `NEXT_PUBLIC_*` são
+   embutidas no JavaScript **durante o build**, não lidas em tempo real. Se
+   der "Internal Server Error" ou a página não carregar, vá em
+   **Deployments → ⋯ → Redeploy** para gerar um build novo com os valores
+   atualizados.
 5. Depois do primeiro deploy, se você habilitar confirmação de e-mail no
    Supabase, ajuste em **Authentication → URL Configuration** a *Site URL*
    e as *Redirect URLs* para o domínio que a Vercel gerou (ex:
